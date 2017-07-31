@@ -260,7 +260,12 @@ uint32_t NetworkController::getNetworkForDns(unsigned* netId, uid_t uid) const {
         if (virtualNetwork && virtualNetwork->getHasDns()) {
             *netId = virtualNetwork->getNetId();
         } else {
-            *netId = mDefaultNetId;
+            if (mForcedNetId != NETID_UNSET) {
+                ALOGE("DNS: using netID %u", mForcedNetId);
+                *netId = mForcedNetId;
+            } else {
+                *netId = mDefaultNetId;
+            }
         }
     }
     fwmark.netId = *netId;
